@@ -10,10 +10,29 @@ function isValidUrl(url: string): boolean {
   return URL_REGEX.test(url);
 }
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    const result = await database.getUrls();
-    return NextResponse.json(result, { status: 200 });
+    const { searchParams } = new URL(req.url);
+
+    const limit = parseInt(searchParams.get("limit") as string) || 10;
+    const offset = parseInt(searchParams.get("offset") as string) || 0;
+
+    const result = await database.getUrlsPaginated(limit, offset);
+    // return NextResponse.json(result, { status: 200 });
+    const urlCount = await database.getUrlCount();
+    return NextResponse.json(
+      {
+        data: result,
+        total: urlCount,
+        limit,
+        offset,
+        total_pages: Math.ceil(urlCount / limit),
+        current_page: offset / limit + 1,
+        has_next: offset + limit < urlCount,
+        has_prev: offset > 0,
+      },
+      { status: 200 }
+    );
   } catch (error: unknown) {
     console.error("GET /api/links error:", error);
 

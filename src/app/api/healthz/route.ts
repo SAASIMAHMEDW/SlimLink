@@ -1,10 +1,11 @@
+import { database } from "@/service/database";
+import { NextResponse } from "next/server";
+
 export async function GET() {
-  // TODO: Check if DB is healthy
-  return new Response(
-    JSON.stringify({
-      ok: true,
-      version: "1.0",
-      datetime: new Date().toISOString(),
-    })
-  );
+  const res = await database.pingDb();
+  return NextResponse.json({
+    ok: res,
+    version: "1.0",
+    datetime: new Date().toISOString(),
+  });
 }

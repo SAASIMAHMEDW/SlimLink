@@ -71,6 +71,40 @@ interface Url {
 }
 
 class Database {
+  /**
+   * Checks if the database is responding to queries.
+   *
+   * @returns {Promise<boolean>} A promise that resolves to true if the database is healthy, false otherwise.
+   */
+  async pingDb(): Promise<boolean> {
+    try {
+      // SELECT 1 is the lightweight standard for health checks
+      await sql`SELECT 1`;
+      // TODO: verify table exists and is accessible
+      return true;
+    } catch (error) {
+      console.error("Database health check failed:", getErrorMessage(error));
+      return false;
+    }
+  }
+  async pingDbX(): Promise<{ connected: boolean; tableAccessible?: boolean }> {
+    try {
+      // Basic connection check
+      await sql`SELECT 1`;
+
+      // Optional: verify table exists and is accessible
+      try {
+        await sql`SELECT 1 FROM urls LIMIT 1`;
+        return { connected: true, tableAccessible: true };
+      } catch {
+        return { connected: true, tableAccessible: false };
+      }
+    } catch (error) {
+      console.error("Database health check failed:", getErrorMessage(error));
+      return { connected: false };
+    }
+  }
+
   // Get all URLs
   async getUrls(): Promise<Url[]> {
     try {
@@ -279,7 +313,7 @@ class Database {
       const result = await sql`
         UPDATE urls 
         SET "totalClicked" = "totalClicked" + 1, 
-            "lastClicked" = NOW()
+            "lastClicked" = ${new Date().toISOString()}
         WHERE "shortUrl" = ${shortUrl}
         RETURNING *
       `;

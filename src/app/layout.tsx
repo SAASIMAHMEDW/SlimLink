@@ -4,8 +4,11 @@ import "./globals.css";
 import { Navbar } from "@/shared/components";
 
 export const metadata: Metadata = {
-  title: "Title",
-  description: "Your Guide",
+  title: {
+    template: "%s - SlimLink",
+    default: "SlimLink - URL Shortener",
+  },
+  description: "Fast and reliable URL shortening service",
 };
 
 export default function RootLayout({

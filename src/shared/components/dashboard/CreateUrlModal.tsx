@@ -54,7 +54,7 @@ export default function CreateUrlModal({
   return (
     <div
       onClick={handleBackdropClick}
-      className="fixed h-fit inset-0 z-50 flex items-center justify-center backdrop-blur-md "
+      className="fixed inset-0  z-50 flex items-center justify-center backdrop-blur-md "
     >
       <form
         onSubmit={handleSubmit}

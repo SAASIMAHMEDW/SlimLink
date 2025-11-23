@@ -111,7 +111,7 @@ export default function Navbar() {
   return (
     <>
       {/* Main Navbar */}
-      <header className="relative flex items-center justify-between whitespace-nowrap px-4 sm:px-6 lg:px-10 py-4 w-full ">
+      <header className="sticky top-0 z-50 backdrop-blur-sm  flex items-center justify-between whitespace-nowrap px-4 sm:px-6 lg:px-10 py-4 w-full ">
         <div className="absolute bottom-0 left-0 right-0 h-px bg-linear-to-r from-purple-400 to-purple-600 opacity-20"></div>
         {/* Logo Section with Gradient and Brand Icon */}
         <div className="flex items-center gap-3">
