@@ -1,4 +1,4 @@
-import gen from "@/lib/generate_id";
+import gen from "@/lib/IDGenerator";
 import { NextResponse } from "next/server";
 import { database, ValidationError, DatabaseError } from "@/service/database";
 

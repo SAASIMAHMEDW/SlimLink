@@ -1,9 +1,12 @@
-import { nanoid, customAlphabet } from "nanoid";
+/**
+ * Default URL-safe alphabet (same as nanoid)
+ */
+const URL_SAFE_ALPHABET =
+  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-";
 
 export interface IDGeneratorOptions {
   /**
-   * Character set to use. If omitted, nanoid's default URL-friendly
-   * alphabet is used.
+   * Character set to use. If omitted, uses URL-friendly alphabet.
    */
   alphabet?: string;
   /**
@@ -14,14 +17,38 @@ export interface IDGeneratorOptions {
 }
 
 /**
- * ID generator wrapper around nanoid/customAlphabet.
+ * Generate a cryptographically secure random string from a given alphabet.
+ * Uses rejection sampling to ensure uniform distribution.
+ */
+function generateSecureString(alphabet: string, length: number): string {
+  const mask = (2 << (Math.log(alphabet.length - 1) / Math.LN2)) - 1;
+  const step = -~((1.6 * mask * length) / alphabet.length);
+
+  let id = "";
+
+  while (true) {
+    const bytes = new Uint8Array(step);
+    crypto.getRandomValues(bytes);
+
+    for (let i = 0; i < step; i++) {
+      const byte = bytes[i] & mask;
+      if (alphabet[byte]) {
+        id += alphabet[byte];
+        if (id.length === length) return id;
+      }
+    }
+  }
+}
+
+/**
+ * ID generator using crypto.getRandomValues for secure randomness.
  *
  * - Default length: 6
- * - If `alphabet` is provided, uses customAlphabet(alphabet, len)
- * - Otherwise uses nanoid(len)
+ * - Default alphabet: URL-safe (0-9, A-Z, a-z, _, -)
+ * - Uses rejection sampling for uniform distribution
  */
 class IDGenerator {
-  private alphabet?: string;
+  private alphabet: string;
   private length: number;
 
   constructor(options: IDGeneratorOptions = {}) {
@@ -32,6 +59,8 @@ class IDGenerator {
     if (options.alphabet) {
       this.assertValidAlphabet(options.alphabet);
       this.alphabet = options.alphabet;
+    } else {
+      this.alphabet = URL_SAFE_ALPHABET;
     }
   }
 
@@ -60,15 +89,7 @@ class IDGenerator {
   generate(length?: number): string {
     const len = length ?? this.length;
     this.assertValidLength(len);
-
-    if (this.alphabet) {
-      // customAlphabet returns a generator for a fixed size; create one per-call
-      const gen = customAlphabet(this.alphabet, len);
-      return gen();
-    }
-
-    // default nanoid for URL-friendly alphabet
-    return nanoid(len);
+    return generateSecureString(this.alphabet, len);
   }
 
   /**
@@ -91,7 +112,7 @@ class IDGenerator {
   }
 
   /**
-   * Create a new IDGenerator using nanoid's default URL-friendly alphabet.
+   * Create a new IDGenerator using URL-safe alphabet.
    */
   static urlSafe(length = 6) {
     return new IDGenerator({ length });
@@ -107,15 +128,19 @@ class IDGenerator {
 
   /**
    * Update alphabet for this generator instance.
-   * Pass undefined to revert to nanoid default alphabet.
+   * Pass undefined to revert to URL-safe default alphabet.
    */
   setAlphabet(alphabet?: string) {
-    if (alphabet !== undefined) this.assertValidAlphabet(alphabet);
-    this.alphabet = alphabet;
+    if (alphabet !== undefined) {
+      this.assertValidAlphabet(alphabet);
+      this.alphabet = alphabet;
+    } else {
+      this.alphabet = URL_SAFE_ALPHABET;
+    }
   }
 }
 
-const gen = IDGenerator.alphaNumeric(); // default length 6 numerice
+const gen = IDGenerator.urlSafe();
 
 export default gen;
 
