@@ -9,10 +9,10 @@ import {
 // GET - Retrieve a URL by code and redirect
 export async function GET(
   req: Request,
-  { params }: { params: { code: string } }
+  context: { params: Promise<{ code: string }> }
 ) {
   try {
-    const { code } = await params;
+    const { code } = await context.params;
 
     if (!code || code.trim().length === 0) {
       return NextResponse.json({ error: "Code is required" }, { status: 400 });
@@ -40,7 +40,7 @@ export async function GET(
     //   { status: 200 }
     // );
   } catch (error: unknown) {
-    console.error(`GET /api/links/${(await params).code} error:`, error);
+    // console.error(`GET /api/links/${(await params).code} error:`, error);
 
     if (error instanceof DatabaseError) {
       return NextResponse.json(
@@ -59,10 +59,10 @@ export async function GET(
 // PATCH - Partially update a URL
 export async function PATCH(
   req: Request,
-  { params }: { params: { code: string } }
+  context: { params: Promise<{ code: string }> }
 ) {
   try {
-    const { code } = await params;
+    const { code } = await context.params;
     const data: { redirectUrl?: string } = await req.json();
 
     if (!code || code.trim().length === 0) {
@@ -118,7 +118,7 @@ export async function PATCH(
       { status: 400 }
     );
   } catch (error: unknown) {
-    console.error(`PATCH /api/links/${(await params).code} error:`, error);
+    // console.error(`PATCH /api/links/${(await params).code} error:`, error);
 
     if (error instanceof ValidationError) {
       return NextResponse.json({ error: error.message }, { status: 400 });
@@ -152,10 +152,10 @@ export async function PATCH(
 // DELETE - Remove a URL by code
 export async function DELETE(
   req: Request,
-  { params }: { params: { code: string } }
+  context: { params: Promise<{ code: string }> }
 ) {
   try {
-    const { code } = await params;
+    const { code } = await context.params;
 
     if (!code || code.trim().length === 0) {
       return NextResponse.json({ error: "Code is required" }, { status: 400 });
@@ -173,7 +173,7 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error: unknown) {
-    console.error(`DELETE /api/links/${(await params).code} error:`, error);
+    // console.error(`DELETE /api/links/${(await params).code} error:`, error);
 
     if (error instanceof ValidationError) {
       return NextResponse.json({ error: error.message }, { status: 400 });
@@ -200,10 +200,10 @@ export async function DELETE(
 // PUT - Replace entire URL resource
 export async function PUT(
   req: Request,
-  { params }: { params: { code: string } }
+  context: { params: Promise<{ code: string }> }
 ) {
   try {
-    const { code } = await params;
+    const { code } = await context.params;
     const data: { redirectUrl: string } = await req.json();
 
     if (!code || code.trim().length === 0) {
@@ -248,7 +248,7 @@ export async function PUT(
       { status: 200 }
     );
   } catch (error: unknown) {
-    console.error(`PUT /api/links/${(await params).code} error:`, error);
+    // console.error(`PUT /api/links/${(await params).code} error:`, error);
 
     if (error instanceof ValidationError) {
       return NextResponse.json({ error: error.message }, { status: 400 });

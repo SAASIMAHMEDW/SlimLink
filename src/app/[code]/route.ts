@@ -1,13 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { database, DatabaseError } from "@/service/database";
 
-// GET - Retrieve a URL by code and redirect
 export async function GET(
-  req: Request,
-  { params }: { params: { code: string } }
+  req: NextRequest,
+  context: { params: Promise<{ code: string }> }
 ) {
   try {
-    const { code } = await params;
+    const { code } = await context.params;
 
     if (!code || code.trim().length === 0) {
       return NextResponse.json({ error: "Code is required" }, { status: 400 });
@@ -22,13 +21,11 @@ export async function GET(
       );
     }
 
-    // Update click statistics
     await database.updateClickStats(code);
 
-    // Redirect to the target URL (302 temporary redirect for analytics tracking)
     return NextResponse.redirect(result.redirectUrl, { status: 302 });
   } catch (error: unknown) {
-    console.error(`GET /api/links/${(await params).code} error:`, error);
+    console.error(`GET /[code] error:`, error);
 
     if (error instanceof DatabaseError) {
       return NextResponse.json(
