@@ -1,1 +1,1 @@
-export { default as CreateButton } from "../dashboard/CreateButton";
+export { default as CreateButton } from '../dashboard/ui/CreateButton'
