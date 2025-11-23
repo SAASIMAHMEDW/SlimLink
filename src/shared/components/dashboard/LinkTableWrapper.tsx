@@ -26,7 +26,7 @@ async function getLinks(page: number): Promise<ApiResponse> {
   const offset = (page - 1) * limit;
 
   const res = await fetch(
-    `http://localhost:3000/api/links?limit=${limit}&offset=${offset}`,
+    `/api/links?limit=${limit}&offset=${offset}`,
     {
       cache: "no-store",
     }

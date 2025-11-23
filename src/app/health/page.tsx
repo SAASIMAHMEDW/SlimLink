@@ -1,17 +1,10 @@
-import { rejects } from "assert";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "System Status",
   description: "A real-time overview of our system's performance.",
 };
 
-interface StatusItem {
-  name: string;
-  status: "operational" | "degraded" | "down" | "not-implemented";
-  statusLabel: string;
-}
 interface SystemHealth {
   overall: "operational" | "degraded" | "down";
   lastChecked: string;
@@ -97,12 +90,8 @@ const DownSVG = () => {
 };
 
 async function getSystemHealth(): Promise<SystemHealth> {
-  // const res = await fetch('https://api.slimlink.com/health', {
-  //   cache: 'no-store',
-  //   next: { revalidate: 60 }
-  // });
-  // return res.json();
-  
+  // TODO: Replace with a real API call
+  // Simulate a delay
   await new Promise((resolve) => setTimeout(resolve, 3000));
 
   return {
@@ -137,29 +126,6 @@ async function HealthPage() {
     timeZone: "UTC",
     timeZoneName: "short",
   });
-
-  const components: StatusItem[] = [
-    {
-      name: "Website",
-      status: "operational",
-      statusLabel: "Operational",
-    },
-    {
-      name: "Shortening API",
-      status: "operational",
-      statusLabel: "Operational",
-    },
-    {
-      name: "Redirection Service",
-      status: "not-implemented",
-      statusLabel: "Not Implemented",
-    },
-    {
-      name: "Database",
-      status: "operational",
-      statusLabel: "Operational",
-    },
-  ];
 
   const mainStatusConfig = {
     operational: {

@@ -23,12 +23,8 @@ export default function Dashboard() {
       return;
     }
 
-    // const fetchJson = await fetchRes.json();
-    // console.log(fetchJson);
-
     // Refresh the page to show new link
     router.refresh();
-    // return await database.addUrl(fullUrl, shortUrl);
   };
   const handleModalOpenClose = () => {
     setIsModalOpen((prev) => !prev);
@@ -43,8 +39,7 @@ export default function Dashboard() {
           <h1 className="">Search Bar</h1>
         </div>
       </div>
-      {/* {data.length != 0 && <NoLinks />}
-      {data && <LinkTable />} */}
+
       <ShowLinks page={currentPage} />
       <CreateUrlModal
         isOpen={isModalOpen}

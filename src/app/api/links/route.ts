@@ -18,7 +18,7 @@ export async function GET(req: Request) {
     const offset = parseInt(searchParams.get("offset") as string) || 0;
 
     const result = await database.getUrlsPaginated(limit, offset);
-    // return NextResponse.json(result, { status: 200 });
+
     const urlCount = await database.getUrlCount();
     return NextResponse.json(
       {

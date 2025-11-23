@@ -61,10 +61,7 @@ const NotFound = () => {
           >
             <span className="relative z-10">Go To Dashboard</span>
           </Link>
-          <button
-            // onClick={() => window.history.back()}
-            className="px-8 py-3 backdrop-blur-md bg-white/10 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/20 transition-all duration-200 shadow-lg"
-          >
+          <button className="px-8 py-3 backdrop-blur-md bg-white/10 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/20 transition-all duration-200 shadow-lg">
             Go Back
           </button>
         </div>

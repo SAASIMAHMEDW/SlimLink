@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface LinkData {
   id: number;
@@ -32,6 +33,7 @@ const LinkTable = ({
   onPageChange,
 }: LinkTableProps) => {
   const [copiedId, setCopiedId] = useState<number | null>(null);
+  const router = useRouter();
 
   const copyToClipboard = async (shortUrl: string, id: number) => {
     try {
@@ -73,7 +75,8 @@ const LinkTable = ({
       });
 
       if (res.ok) {
-        window.location.reload(); // Or use router.refresh()
+        // window.location.reload();
+        router.refresh();
       } else {
         alert("Failed to delete link");
       }

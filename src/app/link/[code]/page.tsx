@@ -8,6 +8,7 @@ export default async function LinkStatsPage({
 }: {
   params: { code: string };
 }) {
+  // context: { params: Promise<{ code: string }> }
   const { code } = await params;
 
   if (!code || code.trim().length === 0) {

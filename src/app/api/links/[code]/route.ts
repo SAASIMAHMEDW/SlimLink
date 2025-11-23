@@ -32,16 +32,7 @@ export async function GET(
 
     // Redirect to the target URL (302 temporary redirect for analytics tracking)
     return NextResponse.redirect(result.redirectUrl, { status: 302 });
-
-    // return NextResponse.json(
-    //   {
-    //     redirectUrl: result.redirectUrl,
-    //   },
-    //   { status: 200 }
-    // );
   } catch (error: unknown) {
-    // console.error(`GET /api/links/${(await params).code} error:`, error);
-
     if (error instanceof DatabaseError) {
       return NextResponse.json(
         { error: "Failed to fetch URL", details: error.message },
@@ -118,8 +109,6 @@ export async function PATCH(
       { status: 400 }
     );
   } catch (error: unknown) {
-    // console.error(`PATCH /api/links/${(await params).code} error:`, error);
-
     if (error instanceof ValidationError) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
@@ -173,8 +162,6 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error: unknown) {
-    // console.error(`DELETE /api/links/${(await params).code} error:`, error);
-
     if (error instanceof ValidationError) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
@@ -198,6 +185,7 @@ export async function DELETE(
 }
 
 // PUT - Replace entire URL resource
+// TODO: Implement PUT
 export async function PUT(
   req: Request,
   context: { params: Promise<{ code: string }> }

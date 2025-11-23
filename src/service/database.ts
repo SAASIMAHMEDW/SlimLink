@@ -492,3 +492,4 @@ class Database {
 export const database = new Database();
 export { DatabaseError, NotFoundError, ValidationError };
 export type { Url };
+export { getErrorMessage, getErrorDetail, getErrorCode };

@@ -38,7 +38,7 @@ const Error = ({ error, reset }: ErrorProps) => {
 
         <div className="flex gap-3 justify-center">
           <button
-            onClick={() => router.refresh()} // Better for server components
+            onClick={() => router.refresh()} 
             className="px-6 py-3 bg-linear-to-r from-purple-400 to-purple-600 text-white font-semibold rounded-lg hover:from-purple-500 hover:to-purple-700 transition-all"
           >
             Refresh
